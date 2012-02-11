@@ -6,40 +6,50 @@
  */
 (function( $, undefined ) {
 
+    var Rect = function(left, top, width, height) {
+        if( ! ( this instanceof Rect ) ) {
+            return new Rect(left, top, width, height);
+        }
+
+        this.left = left;
+        this.top = top;
+        this.right = left + width;
+        this.bottom = top + height;
+
+        this.width = width;
+        this.height = height;
+    };
+
+    Rect.prototype.contains = function(otherRect) {
+        return this.left <= otherRect.left
+            && this.top <= otherRect.top
+            && this.right >= otherRect.right
+            && this.bottom >= otherRect.bottom;
+    };
+
     $.extend ( $.expr[':'], {
 
         obscured: function ( obj ) {
-            var $obj = $( obj );
+            var $obj = $(obj);
             var $parent = $obj.offsetParent();
+            var $window = $(window);
 
             var isHidden = $obj.is(':hidden');
 
             if( isHidden ) $obj.show();
 
-            var selfOffset = $obj.offset();
+            var objOffset = $obj.offset();
 
-            var selfRect = {
-                top: selfOffset.top,
-                left: selfOffset.left,
-                right: selfOffset.left + $obj.outerWidth(),
-                bottom: selfOffset.top + $obj.outerHeight()
-            };
-
-            var parentRect = {
-                top: $parent.scrollTop(),
-                left: $parent.scrollLeft(),
-                right: $parent.scrollLeft() + $parent.width(),
-                bottom: $parent.scrollTop() + $parent.height()
-            };
-
-            var fullyVisible =  selfRect.top >= parentRect.top
-                && selfRect.left >= parentRect.left
-                && selfRect.right <= parentRect.right
-                && selfRect.bottom <= parentRect.bottom;
+            var objRect = new Rect(objOffset.left, objOffset.top, $obj.outerWidth(), $obj.outerHeight());
+            var parentRect = new Rect($parent.scrollLeft(), $parent.scrollTop(), $parent.width(), $parent.height());
+            var windowRect = new Rect($window.scrollLeft(), $window.scrollTop(), $window.width(), $window.height());
 
             if( isHidden ) $obj.hide();
 
-            return ! fullyVisible;
+            var parentContains = parentRect.contains(objRect);
+            var windowContains = windowRect.contains(objRect);
+
+            return ! ( parentContains && windowContains );
         }
 
     } );
