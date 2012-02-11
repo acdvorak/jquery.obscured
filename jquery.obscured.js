@@ -1,3 +1,9 @@
+/*!
+ * jQuery obscured
+ *  Copyright 2012, Andrew C. Dvorak
+ *  Released under the MIT, BSD, and GPL Licenses.
+ *  More information: https://github.com/acdvorak/jquery.obscured
+ */
 (function( $, undefined ) {
 
     $.extend ( $.expr[':'], {
