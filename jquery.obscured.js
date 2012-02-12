@@ -1,5 +1,8 @@
 /*!
  * jQuery obscured
+ *
+ *  @version 1.0.0
+ *
  *  Copyright 2012, Andrew C. Dvorak
  *  Released under the MIT, BSD, and GPL Licenses.
  *  More information: https://github.com/acdvorak/jquery.obscured
