@@ -1,5 +1,5 @@
 /*!
- * jQuery obscured
+ * jQuery :obscured
  *
  *  @version 1.0.0
  *
