@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>jQuery :obscured Test Suite</title>
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 125%;
+        }
+
+        .test {
+            position: fixed;
+            height: 200px;
+            border: 2px solid transparent;
+        }
+
+        .pass { color: green; border-color: green; }
+        .fail { color: red;   border-color: red; }
+    </style>
+</head>
+<body>
+
+<div id="template" class="test">
+    <span class="num"></span>
+    <span class="status"></span>
+</div>
+
+<ul id="results">
+
+</ul>
+
+<script src="jquery-1.7.1.js"></script>
+<script src="jquery.obscured.js"></script>
+
+<script>
+    $(function() {
+        var positions = [ '-3px', '-2px', '-1px', '0', '1px', '2px', '3px' ];
+
+        var $body = $('body');
+        var $template = $('#template').detach();
+        var $results = $('#results');
+
+        var resultNum = 1;
+
+        $.each([ 'top', 'bottom', 'left', 'right' ], function(_, cssProp) {
+            $.each(positions, function(i, cssValue) {
+                test(i, cssProp, cssValue);
+            });
+        });
+
+        function test(i, cssProp, cssValue) {
+            var $clone = $template.clone();
+
+            var css = {};
+
+            var isTopBottom = /^(?:top|bottom)$/.test(cssProp);
+
+            css[isTopBottom ? 'left' : 'top']     = Math.floor( 100 * i / positions.length ) + '%';
+            css[isTopBottom ? 'width' : 'height'] = Math.floor( 100 * 1 / positions.length ) + '%';
+            css[cssProp] = cssValue;
+
+            $clone.attr('id', 'test_' + ( i + 1 ));
+            $clone.find('.num').text(i + 1);
+            $clone.css(css);
+
+            $body.append($clone);
+
+            var actual = $clone.is(':obscured');
+            var expected = parseInt(cssValue) < 0;
+
+            var passed = actual === expected;
+
+            var $li = $('<li class="result" />');
+            $li.text((resultNum++) + ': ' + (passed ? 'pass' : 'fail'));
+            $li.addClass(passed ? 'pass' : 'fail');
+            
+            $results.append($li);
+
+            $clone.remove();
+        }
+    });
+</script>
+
+</body>
+</html>
