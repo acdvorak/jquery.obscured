@@ -37,9 +37,9 @@
     <span class="status"></span>
 </div>
 
-<ul id="results">
+<ol id="results">
 
-</ul>
+</ol>
 
 <script src="jquery-1.7.1.js"></script>
 <script src="jquery.obscured.js"></script>
@@ -51,8 +51,6 @@
         var $body = $('body');
         var $template = $('#template').detach();
         var $results = $('#results');
-
-        var resultNum = 1;
 
         $.each([ 'top', 'bottom', 'left', 'right' ], function(_, cssProp) {
             $.each(positions, function(i, cssValue) {
@@ -83,7 +81,7 @@
             var passed = actual === expected;
 
             var $li = $('<li class="result" />');
-            $li.text((resultNum++) + ': ' + (passed ? 'pass' : 'fail'));
+            $li.text(passed ? 'pass' : 'fail');
             $li.addClass(passed ? 'pass' : 'fail');
             
             $results.append($li);
